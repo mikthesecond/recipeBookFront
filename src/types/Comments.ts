@@ -30,6 +30,7 @@ export type CommentsActions = CommentsActionError | CommentsActionSuccess | Comm
 export interface Comment {
     id: number;
     recipe_id: number;
-    username: string;
+    user_name: string;
+    user_id:number;
     comment: string;
   }

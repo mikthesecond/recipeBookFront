@@ -1,26 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store/reducers';
+import { logUser } from '../store/action-creator/users';
 
-export function AdminLogin() {
+export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch<any>()
+  const {user, error, loading} = useSelector((state:RootState)=>state.user)
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user));
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    try {
-      navigate('/admin/recipes');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-    } finally {
-      setLoading(false);
-    }
+    dispatch(logUser(email, password));
   };
 
   return (
@@ -31,7 +31,7 @@ export function AdminLogin() {
             <Lock className="h-6 w-6 text-indigo-600" />
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Admin Login
+            Login
           </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleLogin}>

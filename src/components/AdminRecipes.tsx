@@ -1,35 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, LogOut } from 'lucide-react';
 import { RecipeList } from './RecipeList';
-import type { Recipe } from '../types/Recipe';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store/reducers';
+import { fetchRecipes } from '../store/action-creator/recipes';
 
 export function AdminRecipes() {
   const navigate = useNavigate();
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const dispatch = useDispatch<any>()
+  const {recipes,loading,error} = useSelector((state:RootState)=>state.recipes)
+  const {user} = useSelector((state:RootState)=>state.user)
+
 
   useEffect(() => {
-    const checkAuth = async () => {
-    
-    };
-
-    checkAuth();
-  }, [navigate]);
+    if (user && user.role === "user"||!user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
-    const fetchRecipes = async () => {
-      try {
-       
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch recipes');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRecipes();
+  dispatch(fetchRecipes())
   }, []);
 
   const handleLogout = async () => {

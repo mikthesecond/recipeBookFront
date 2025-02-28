@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Minus, ArrowLeft } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store/reducers';
+import { addRecipe } from '../store/action-creator/recipes';
+import { Recipe } from '../types/Recipe';
 
 export function CreateRecipe() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
   const [ingredients, setIngredients] = useState(['']);
   const [instructions, setInstructions] = useState(['']);
-
-  const [recipe, setRecipe] = useState({
+  const dispatch = useDispatch<any>()
+  const {loading,error} = useSelector((state:RootState)=>state.recipes)
+  const [recipe, setRecipe] = useState<Recipe>({
     title: '',
     category: 'breakfast',
     rating: 0,
-    prep_time: '',
+    preptime: '',
     servings: 1,
     image: '',
     chef: '',
@@ -60,18 +63,11 @@ export function CreateRecipe() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    try {
-
-      navigate('/admin/recipes');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-    } finally {
-      setLoading(false);
-    }
+    const fullRecipe = { ...recipe, ingredients, instructions };
+    dispatch(addRecipe(fullRecipe));
+    navigate('/admin/recipes');
   };
+  
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -136,10 +132,10 @@ export function CreateRecipe() {
                   </label>
                   <input
                     type="text"
-                    id="prep_time"
-                    name="prep_time"
+                    id="preptime"
+                    name="preptime"
                     required
-                    value={recipe.prep_time}
+                    value={recipe.preptime}
                     onChange={handleChange}
                     placeholder="e.g., 30 mins"
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"

@@ -15,9 +15,6 @@ export const recipeReducer = (state = initialState, action: RecipeActions): Reci
             return { loading: false, error: action.payload, recipes: [] };
         case RECIPE_ACTIONS.FETCH_RECIPE_SUCCESS:
             return { loading: false, error: null, recipes: action.payload };
-        
-
-        case RECIPE_ACTIONS.FETCH_RECIPE_BY_ID:return { loading:true, error:null,recipes:[]};
         default:
             return state;
     }
