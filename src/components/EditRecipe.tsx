@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Plus, Minus, ArrowLeft, Save } from 'lucide-react';
+import { Plus, Minus, ArrowLeft } from 'lucide-react';
 import { Recipe } from '../types/Recipe';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/reducers';

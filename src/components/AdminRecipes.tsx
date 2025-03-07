@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Plus, LogOut } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Plus, LogOut, Bookmark } from 'lucide-react';
 import { RecipeList } from './RecipeList';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/reducers';
 import { fetchRecipes } from '../store/action-creator/recipes';
+import { setUser } from '../store/action-creator/users';
 
 export function AdminRecipes() {
   const navigate = useNavigate();
@@ -23,9 +24,12 @@ export function AdminRecipes() {
   dispatch(fetchRecipes())
   }, []);
 
-  const handleLogout = async () => {
-    navigate('/admin/login');
-  };
+  const handleLogout = ()=>
+  {
+    localStorage.removeItem('user')
+    dispatch(setUser(null))
+    navigate('/login')
+  }
 
   if (loading) {
     return (
@@ -41,6 +45,13 @@ export function AdminRecipes() {
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
           <div className="flex items-center gap-4">
+          <Link
+      to="/saved-recipes"
+      className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+    >
+      <Bookmark size={20} className="mr-2" />
+      Saved
+    </Link>
             <button
               onClick={() => navigate('/admin/recipes/new')}
               className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

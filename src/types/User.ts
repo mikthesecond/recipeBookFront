@@ -10,7 +10,7 @@ export interface UserActionError {
 
 export interface UserActionSuccess {
     type: USER_ACTIONS.ADD_USER_SUCCESS;
-    payload: User;
+    payload: User|null;
 }
 
 export interface UserAction {
